@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2 import OperationalError
 
+password = input()
 
 
 def create_connection(dbname, dbuser, dbpassword, dbhost, dbport):
@@ -19,8 +20,7 @@ def create_connection(dbname, dbuser, dbpassword, dbhost, dbport):
     return connection
 
 
-conn = create_connection('postgres', 'postgres', password, '', "5432")
-cursor = conn.cursor()
+cursor = create_connection('postgres', 'postgres', password, '', "5432").cursor()
 
 # SERIAL - автоматический подбор ключа для строки MySQL
 MY_TABLE = """ DROP TABLE IF EXISTS superheroes_mine;
@@ -38,7 +38,7 @@ MY_TABLE = """ DROP TABLE IF EXISTS superheroes_mine;
 #MY_TABLE2 = """DROP TABLE superheroes_mine"""
 
 cursor.execute(MY_TABLE)
-conn.commit()
+#cursor.commit()
 
 insert_query = """ALTER TABLE superheroes ADD COLUMN alive BOOLEAN"""
 cursor.execute(insert_query)

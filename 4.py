@@ -13,6 +13,7 @@ def create_connection(dbname, dbuser, dbpassword, dbhost, dbport):
             host=dbhost,
             port=dbport
         )
+#        connection.autocommit = True
         print("Connection to PostgreSQL DB successful")
         print(connection.get_dsn_parameters(), "\n")
     except OperationalError as e:
@@ -24,19 +25,13 @@ cursor = create_connection('postgres', 'postgres', '121200986q', '', "5432").cur
 cursor.execute("SELECT version();")
 record = cursor.fetchone()
 print("Вы подключены к - ", record, "\n")
+#cursor.commit()
 
-insert_query = """ALTER TABLE superheroes_mine ADD COLUMN shittt1 INT\n;"""
+insert_query = """ALTER TABLE superheroes_mine ADD COLUMN woow INTEGER;"""
 insert_query2 = """\d superheroes_mine"""
 #insert_query = """ALTER TABLE superheroes_mine DROP COLUMN year"""
 cursor.execute(insert_query)
 
-#cursor.commit()
-superheroes_mine = cursor.fetchall()
-for row in superheroes_mine:
-    print(row)
-
-
-#cursor.execute(insert_query2)
 
 
 

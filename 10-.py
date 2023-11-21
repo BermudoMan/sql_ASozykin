@@ -158,6 +158,81 @@ try:
             table_name = cursor.fetchall()
             for row in table_name:
                 print(row)
+
+    def sub_issue():
+        with connection.cursor() as cursor:
+            cursor.execute("""
+            SELECT id, name, price
+            FROM products
+            WHERE price = (SELECT MAX(price)
+                           FROM products);
+            """)
+
+            table_name = cursor.fetchall()
+            for row in table_name:
+                print(row)
+
+    # products ordered more than 0 time
+    def sub_issue2():
+        with connection.cursor() as cursor:
+            cursor.execute("""
+            SELECT id, name, price
+            FROM products
+            WHERE id IN (SELECT product_id
+                           FROM sales);
+            """)
+
+            table_name = cursor.fetchall()
+            for row in table_name:
+                print(row)
+
+    def sub_issue3():
+        with connection.cursor() as cursor:
+            cursor.execute("""
+            UPDATE products
+            SET price = price + 599
+            WHERE type_id = (SELECT id
+                             FROM product_types
+                             WHERE type_name='Книга'));
+            """)
+
+            table_name = cursor.fetchall()
+            for row in table_name:
+                print(row)
+    def sub_issue3():
+        with connection.cursor() as cursor:
+            cursor.execute("""
+            UPDATE products
+            SET price = price + 599
+            WHERE type_id = (SELECT id
+                             FROM product_types
+                             WHERE type_name='Книга');
+            """)
+
+    def sub_issue4():
+        with connection.cursor() as cursor:
+            cursor.execute("""
+            UPDATE products
+            SET price = price + 599
+            WHERE type_id = (SELECT id
+                             FROM product_types
+                             WHERE type_name='Книга');
+            SELECT * FROM products;
+            """)
+
+            table_name = cursor.fetchall()
+            for row in table_name:
+                print(row)
+
+    def transactions():
+        with connection.cursor() as cursor:
+            cursor.execute("""
+
+            """)
+
+            table_name = cursor.fetchall()
+            for row in table_name:
+                print(row)
 # RUNNING
     # № 11
     joins() # INNER JOIN is the same
@@ -170,11 +245,30 @@ try:
     # № 12
     print('====')
     db_schem()
-    print('====')
+    print('----')
     # all order of the selected customer
     db_schem2()
 
+    # № 13
+    print('====')
+    sub_issue()
+    print('----')
+    sub_issue2()
+    print('----')
+    sub_issue3()
+    print('----')
+    sub_issue4()
 
+    ## № 14 TRANSACTIONS
+    print('====')
+    # execution of all sql commands in the block TOGEATHER! <START TRANSACTION;>...</COMMIT>
+    # (fix changes in DB) or </ROLLBACK> (for back changes)
+    ## № 15 INDEXES
+    print('====')
+    # apply for separate column\...s in the DB for fast searching needs row data
+    # need apply <CREATE INDEX> only one time for a table, in continue applied (for the fast searching) automatically
+    ## № 16 CONSTRAIN
+    print('====')
 
 
 # ENDING

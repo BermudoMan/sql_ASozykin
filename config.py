@@ -1,4 +1,4 @@
 host = ""
 user = "postgres"
-password = "12345"
+password = "..."
 db_name = "postgres"

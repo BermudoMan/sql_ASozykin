@@ -224,10 +224,45 @@ try:
             for row in table_name:
                 print(row)
 
-    def transactions():
+    def view():
         with connection.cursor() as cursor:
             cursor.execute("""
+                CREATE VIEW customers_v
+                    AS SELECT id, name FROM customers;
+                SELECT * FROM customers_v;
+            """)
 
+            table_name = cursor.fetchall()
+            for row in table_name:
+                print(row)
+    def view2():
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                CREATE VIEW products_v 
+                AS SELECT p.id AS id,
+                          p.name AS product_name,
+                          t.type_name AS product_type,
+                          p.price AS product_price
+                FROM products AS p JOIN product_types AS t
+                ON p.type_id = t.id;
+                SELECT * FROM products_v ;
+            """)
+
+            table_name = cursor.fetchall()
+            for row in table_name:
+                print(row)
+
+    def view3():
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                CREATE MATERIALIZED VIEW products_materialized
+                AS SELECT p.id AS id,
+                          p.name AS product_name,
+                          t.type_name AS product_type,
+                          p.price AS product_price
+                FROM products AS p JOIN product_types AS t
+                ON p.type_id = t.id;
+                SELECT * FROM products_materialized;
             """)
 
             table_name = cursor.fetchall()
@@ -263,11 +298,39 @@ try:
     print('====')
     # execution of all sql commands in the block TOGEATHER! <START TRANSACTION;>...</COMMIT>
     # (fix changes in DB) or </ROLLBACK> (for back changes)
+
     ## № 15 INDEXES
     print('====')
     # apply for separate column\...s in the DB for fast searching needs row data
     # need apply <CREATE INDEX> only one time for a table, in continue applied (for the fast searching) automatically
-    ## № 16 CONSTRAIN
+
+    ## № 16 CONSTRAINS types: 1)id, 2)NOT NULL, 3)UNIQUE (check dublicates), 4)=2)+3)+1), 5)CHECK (<condition>)
+    #
+    # named constrains:
+    # <column_name> CONSTRAINED <name> - also work for full table
+    #          CHECK (<condition>)
+    #
+    # key constrains
+    # <column_id_T1> REFERENCES <column_id_T2> - ref integrity
+    # possible actions:
+    # ON DELETE RESTRICT - delete rows without INT value column_id in the T1
+    # ON DELETE CASCADE - delete rows with INT value similar to id in the T2 for column_id in the T1
+    # ON UPDATE RESTRICT - banning update actions for rows with links
+    # ON UPDATE CASCADE - update REFERENCES rows in T1 and T2
+    print('====')
+
+    # № 17 WHY NEED? - 1) restriction access to data, hiding some data; 2) show data from several tables;
+    # 3) users work only with viewed data
+    #
+    # 1-3) do not applied for cases with MATERIALIZED - for queries than worked\used a long and often
+    # updating data in the MATERIALIZED table: REFRESH MATERIALIZED VIEW <T>
+    # dropping:
+    # DROP VIEW <T> \ DROP MATERIALIZED VIEW <T>
+    #view()
+    print('----')
+    #view2()
+    print('----')
+    view3()
     print('====')
 
 
